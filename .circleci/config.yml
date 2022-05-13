@@ -8,7 +8,7 @@ jobs:
       - run:
           name: The First Step
           command: |
-            echo 'Hello World!'
+            echo '你好，世界!'
             echo 'This is the delivery pipeline'
       - run:
           name: The Second Step
