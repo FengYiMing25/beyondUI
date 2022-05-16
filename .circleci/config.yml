@@ -1,133 +1,18 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
-version: 2.1
-
-orbs:
-  # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
-  # Orbs reduce the amount of configuration required for common tasks.
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@4.1
-
+version: 2
 jobs:
-  prepare:
-    docker:
-      - image: circleci/node:15.1
-    steps:
-      - checkout
-
-      - node/install-packages:
-          pkg-manager: yarn
-
-      - restore_cache:
-          keys:
-            - v1-{{ checksum "package.json" }}
-
-      - run:
-          name: run Install
-          command: yarn install
-
-      - save_cache:
-          key: v1-{{ checksum "package.json" }}
-          paths:
-            - /node_modules
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - node_modules
-
-  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
-  test:
-    # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
-    docker:
-      - image: circleci/node:15.1
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
-    steps:
-      # Checkout the code as the first step.
-      - checkout
-      - attach_workspace:
-          at: .
-      # Next, the node orb's install-packages step will install the dependencies from a package.json.
-      # The orb install-packages step will also automatically cache them for faster future runs.
-      # - node/install-packages
-      # If you are using yarn instead npm, remove the line above and uncomment the two lines below.
-      - node/install-packages:
-          pkg-manager: yarn
-      - run:
-          name: Run tests
-          command: yarn test
   build:
     docker:
-      - image: circleci/node:15.1
+      - image: circleci/node:10
+    branches:
+      only:
+        - main
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - node/install-packages:
-          pkg-manager: yarn
+      - run: echo "A first hello"
+      - run: npm -v
       - run:
-          name: Run Builds
+          name: Install
+          command: yarn install
+      - run:
+          name: Build
           command: yarn build
-      # 保留dist目录
-      - persist_to_workspace:
-          root: .
-          paths:
-            - deploy.sh
-            - docs-dist
-            - dist
-            - package.json
-            - LICENSE
-            - README.md
-            - node_modules
-
-  publish:
-    docker:
-      - image: circleci/node:15.1
-    steps:
-      - attach_workspace:
-          at: .
-      # 使用https添加github
-      - run: git remote add origin https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${GITHUB_USERNAME}/${PROJECT_NAME}.git
-      - run: docs:deploy
-      - run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-      - run: npm publish
-
-workflows:
-  # Below is the definition of your workflow.
-  # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
-  # CircleCI will run this workflow on every commit.
-  # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
-  automatic-test-build-publish-deploy:
-    jobs:
-      - prepare
-
-      - build:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - main
-      - test:
-          requires:
-            - prepare
-
-      - publish:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
-          # filters 这里存在了一个另人窒息的规则: https://github.com/yyzclyang/notes/issues/34
-          # 因此使用主分支代替这一切
-          #          filters:
-          #            tags:
-          #              only: /^v.*/
-          #            branches:
-          #              ignore: /.*/
-      # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
-      # - node/test
