@@ -13,6 +13,10 @@ jobs:
       - run:
           name: Install
           command: npm install --force
+      - save_cache:
+        paths:
+          - node_modules
+        key: dependencies_circle_demo
       - run:
           name: Build
           command: npm run build
