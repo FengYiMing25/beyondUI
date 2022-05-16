@@ -75,8 +75,11 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
+            - deploy.sh
+            - docs-dist
             - dist
             - package.json
+            - LICENSE
             - README.md
             - node_modules
 
