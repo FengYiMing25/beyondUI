@@ -1,10 +1,8 @@
-defaults: &defaults
-docker: 
-  -image: circleci/node:15.1
 version: 2.1
 jobs:
   prepare:
-    <<: *defaults
+    docker: 
+  -image: circleci/node:15.1
     steps:
       - checkout
       - restore_cache:
@@ -20,7 +18,7 @@ jobs:
         paths:
         - node-modules
   build: 
-    <<: *defaults
+    docker: 
     steps: 
     - checkout
     - attach_workspace:
@@ -31,7 +29,7 @@ jobs:
       paths:
       - dist
   test:
-    <<: *defaults
+      -image: circleci/node:15.1
     steps: 
     - checkout
     - attach_workspace:
