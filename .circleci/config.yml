@@ -11,7 +11,7 @@ orbs:
 jobs:
   prepare:
     docker: 
-  -image: circleci/node:15.1
+  - image: circleci/node:15.1
     steps:
       - checkout
       - restore_cache:
@@ -28,6 +28,8 @@ jobs:
         - node-modules
   build: 
     docker: 
+    - image: circleci/node:15.1
+
     steps: 
     - checkout
     - attach_workspace:
@@ -38,7 +40,7 @@ jobs:
       paths:
       - dist
   test:
-      -image: circleci/node:15.1
+      - image: circleci/node:15.1
     steps: 
     - checkout
     - attach_workspace:
