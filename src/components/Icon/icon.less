@@ -1,4 +1,16 @@
-.icon{
+.icon {
   width: 1em;
   height: 1em;
+}
+.box {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    #000 0,
+    #000 0.8deg,
+    transparent 1deg,
+    transparent calc(360 / 60 * 1deg)
+  );
+  // mask: radial-gradient(transparent 0, transparent 140px, #000 140px);
 }
