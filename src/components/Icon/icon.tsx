@@ -13,11 +13,9 @@ const Icon: FunctionComponent<IconProps> = ({
   ...otherProps
 }) => {
   return (
-    <div>
-      <svg className={classNames(["icon", className])} {...otherProps}>
-        <use xlinkHref={`#${name}`}></use>
-      </svg>
-    </div>
+    <svg className={classNames(["beyond-icon", className])} {...otherProps}>
+      <use xlinkHref={`#${name}`}></use>
+    </svg>
   );
 };
 export default Icon;

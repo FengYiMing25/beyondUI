@@ -1,4 +1,17 @@
-[class*="beyond-"] {
-  margin: 0;
+[class^="beyond-"] {
   box-sizing: border-box;
+  // 因为上边那样写不会应用到伪元素上所以需要加下边的代码
+  &::before,&::after{
+    box-sizing: border-box;
+  }
+}
+
+button {
+  margin-right: 10px;
+  &:first-child{
+    margin-left: 0;
+  }
+  &:last-child{
+    margin-right: 0;
+  }
 }
