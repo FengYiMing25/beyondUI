@@ -14,7 +14,7 @@ const DialogExample = () => {
         click
       </button>
       <Dialog visible={x}>
-        <div>我真的是太倒霉了</div>
+        <div>哈哈哈，每天都要开心</div>
       </Dialog>
     </>
   );
