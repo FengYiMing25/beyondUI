@@ -1,32 +1,120 @@
-import { FunctionComponent, ReactNode } from "react";
+import {
+  cloneElement,
+  FunctionComponent,
+  MouseEventHandler,
+  ReactElement,
+  ReactFragment,
+  ReactNode,
+} from "react";
 import Icon from "../Icon/icon";
 import { scopedClassMaker } from "../../util/classes";
 import "./dialog.less";
-
+import ReactDom from "react-dom";
 interface props {
   visible: boolean;
   children: ReactNode;
+  buttons?: ReactElement[];
+  onclose: MouseEventHandler;
+  maskClosable?: boolean;
 }
 
 const scopedClass = scopedClassMaker("beyond-dialog");
 
 const Dialog: FunctionComponent<props> = (props) => {
-  
-  return props.visible ? (
+  const onclickClose: MouseEventHandler = (e) => {
+    props.onclose(e);
+  };
+  const onclickMaskClose: MouseEventHandler = (e) => {
+    if (props.maskClosable) {
+      props.onclose(e);
+    }
+  };
+  const dialogDom = props.visible ? (
     <>
-      <div className={scopedClass("mask")}></div>
+      <div className={scopedClass("mask")} onClick={onclickMaskClose}></div>
       <div className={scopedClass()}>
-        <div className={scopedClass("close")}>
+        <div className={scopedClass("close")} onClick={onclickClose}>
           <Icon name="close" />
         </div>
         <header className={scopedClass("header")}>标题</header>
         <main className={scopedClass("main")}>{props.children} </main>
-        <footer className={scopedClass("footer")}>
-          <button>ok</button>
-          <button>cancel</button>
-        </footer>
+        {props.buttons && props.buttons.length > 0 && (
+          <footer className={scopedClass("footer")}>
+            {props.buttons &&
+              props.buttons.map((button, index) => {
+                return cloneElement(button, { key: index });
+              })}
+          </footer>
+        )}
       </div>
     </>
   ) : null;
+  // 传送门  使dialogDom传送到body，使层级在最外层
+  return ReactDom.createPortal(dialogDom, document.body);
 };
+Dialog.defaultProps = {
+  maskClosable: false,
+};
+const alert = (content: string) => {
+  const close = () => {
+    ReactDom.render(cloneElement(component, { visible: false }), div);
+    ReactDom.unmountComponentAtNode(div);
+    div.remove();
+  };
+  const component = (
+    <Dialog visible={true} onclose={close}>
+      {content}
+    </Dialog>
+  );
+  const div = document.createElement("div");
+  document.body.append(div);
+  ReactDom.render(component, div);
+};
+const comfirm = (content: string, yes?: () => void, no?: () => void) => {
+  const close = () => {
+    ReactDom.render(cloneElement(component, { visible: false }), div);
+    ReactDom.unmountComponentAtNode(div);
+    div.remove();
+  };
+  const onYes = () => {
+    close();
+    yes && yes();
+  };
+  const onNo = () => {
+    close();
+    no && no();
+  };
+  const component = (
+    <Dialog
+      visible={true}
+      onclose={close}
+      buttons={[
+        <button onClick={onYes}>yes</button>,
+        <button onClick={onNo}>no</button>,
+      ]}
+    >
+      {content}
+    </Dialog>
+  );
+  const div = document.createElement("div");
+  document.body.append(div);
+  ReactDom.render(component, div);
+};
+const modal = (content: ReactNode | ReactFragment) => {
+  const close = () => {
+    ReactDom.render(cloneElement(component, { visible: false }), div);
+    ReactDom.unmountComponentAtNode(div);
+    div.remove();
+  };
+  const component = (
+    <Dialog visible={true} onclose={close}>
+      {content}
+    </Dialog>
+  );
+  const div = document.createElement("div");
+  document.body.append(div);
+  ReactDom.render(component, div);
+  return close;
+};
+export { alert, comfirm, modal };
 export default Dialog;
