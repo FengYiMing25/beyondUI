@@ -56,26 +56,12 @@ Dialog.defaultProps = {
   maskClosable: false,
 };
 const alert = (content: string) => {
-  const close = () => {
-    ReactDom.render(cloneElement(component, { visible: false }), div);
-    ReactDom.unmountComponentAtNode(div);
-    div.remove();
+  const aa = () => {
+    console.log("点击了关闭");
   };
-  const component = (
-    <Dialog visible={true} onclose={close}>
-      {content}
-    </Dialog>
-  );
-  const div = document.createElement("div");
-  document.body.append(div);
-  ReactDom.render(component, div);
+  modal(content, [], aa);
 };
 const comfirm = (content: string, yes?: () => void, no?: () => void) => {
-  const close = () => {
-    ReactDom.render(cloneElement(component, { visible: false }), div);
-    ReactDom.unmountComponentAtNode(div);
-    div.remove();
-  };
   const onYes = () => {
     close();
     yes && yes();
@@ -84,30 +70,30 @@ const comfirm = (content: string, yes?: () => void, no?: () => void) => {
     close();
     no && no();
   };
-  const component = (
-    <Dialog
-      visible={true}
-      onclose={close}
-      buttons={[
-        <button onClick={onYes}>yes</button>,
-        <button onClick={onNo}>no</button>,
-      ]}
-    >
-      {content}
-    </Dialog>
-  );
-  const div = document.createElement("div");
-  document.body.append(div);
-  ReactDom.render(component, div);
+  const close = modal(content, [
+    <button onClick={onYes}>yes</button>,
+    <button onClick={onNo}>no</button>,
+  ],onNo);
 };
-const modal = (content: ReactNode | ReactFragment) => {
+const modal = (
+  content: ReactNode | ReactFragment,
+  buttons?: Array<ReactElement>,
+  beforeClose?: () => void
+) => {
   const close = () => {
     ReactDom.render(cloneElement(component, { visible: false }), div);
     ReactDom.unmountComponentAtNode(div);
     div.remove();
   };
   const component = (
-    <Dialog visible={true} onclose={close}>
+    <Dialog
+      visible={true}
+      onclose={() => {
+        close();
+        beforeClose && beforeClose();
+      }}
+      buttons={buttons}
+    >
       {content}
     </Dialog>
   );
