@@ -1,0 +1,19 @@
+.beyond-layout {
+  border: 1px solid green;
+  display: flex;
+  flex-direction: column;
+}
+.beyond-layout.hasAside {
+  flex-direction: row;
+}
+.beyond-layout.hasAside .beyond-layout {
+  flex-direction: column;
+}
+.beyond-layout-content {
+  flex-grow: 1;
+  border: 1px solid red;
+}
+.beyond-layout .beyond-layout {
+  flex-grow: 1;
+  flex-direction: row;
+}

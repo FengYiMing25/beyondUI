@@ -1,60 +1,75 @@
+#https://github.com/revolunet/create-react-app-circleci/blob/master/.circleci/config.yml
+defaults: &defaults
+  docker:
+    - image: circleci/node:8
 
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
-version: 2.1
-
-orbs:
-  # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
-  # Orbs reduce the amount of configuration required for common tasks.
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@4.1
+version: 2
 jobs:
   prepare:
-    docker: 
-  - image: circleci/node:15.1
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
-        key:
-          - v2-dependencies-{{ checksum "package.json" }}
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
       - run: yarn install
-      - save_cache: 
-        paths:
-        - node-modules
-        key: v2-dependencies-{{ checksum "package.json" }}
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
       - persist_to_workspace:
-        root: .
-        paths:
-        - node-modules
-  build: 
-    docker: 
-    - image: circleci/node:15.1
-
-    steps: 
-    - checkout
-    - attach_workspace:
-      at: .
-    run: yarn build
-    - persist_to_workspace:
-     root: .
-      paths:
-      - dist
+          root: .
+          paths:
+            - node_modules
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - package.json
+            - LICENSE
+            - README.md
   test:
-      - image: circleci/node:15.1
-    steps: 
-    - checkout
-    - attach_workspace:
-      at: .
-    run: yarn test
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: yarn ci
+      - store_test_results:
+          path: test-results
+  publish:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+      - run: npm publish
+
+
 
 workflows:
-version: 2.1
-build_accept_deploy:
-  jobs: 
-    - prepare
-    - build:
-      requires:
-      - test
-    - test:
-      requires:
-      -prepare
+  version: 2
+  build_accept_deploy:
+    jobs:
+      - prepare
+      - build:
+          requires:
+            - test
+      - test:
+          requires:
+            - prepare
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/

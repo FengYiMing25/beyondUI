@@ -1,7 +1,7 @@
 import * as TestRenderer from "react-test-renderer";
 import React from "react";
 import Icon from "./icon";
-import { mount } from "enzyme";
+import {mount} from 'enzyme'
 // 解决测试时候mount没有dom的情况
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
