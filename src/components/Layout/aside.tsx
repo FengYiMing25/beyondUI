@@ -5,7 +5,7 @@ import {
 } from "react";
 import { scopedClassMaker } from "../../util/classes";
 import "./layout.less";
-const scopedClass = scopedClassMaker("beyond-layout-aside");
+const scopedClass = scopedClassMaker("beyond-layout");
 
 interface props extends HTMLAttributes<HTMLElement> {
   children?: ReactNode;

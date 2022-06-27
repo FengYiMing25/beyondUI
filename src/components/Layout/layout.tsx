@@ -13,11 +13,9 @@ interface props extends HTMLAttributes<HTMLElement> {
   children?: ReactNode;
 }
 const Layout: FunctionComponent<props> = (props) => {
-  console.log(props.children);
   let hasAside = false;
   if ((props.children as Array<ReactElement>).length) {
     (props.children as Array<ReactElement>).map((node) => {
-      console.log(node.type);
       if (node.type === Aside) {
         hasAside = true;
       }
@@ -26,7 +24,9 @@ const Layout: FunctionComponent<props> = (props) => {
   const { className, ...rest } = props;
   return (
     <div
-      className={[scopedClass(), className, hasAside && "hasAside"].filter(Boolean).join(" ")}
+      className={[scopedClass(), className, hasAside && scopedClass("hasAside")]
+        .filter(Boolean)
+        .join(" ")}
       {...rest}
     >
       {props.children}
@@ -35,3 +35,8 @@ const Layout: FunctionComponent<props> = (props) => {
 };
 
 export default Layout;
+export { Layout };
+export { default as Header } from "./header";
+export { default as Content } from "./content";
+export { default as Aside } from "./aside";
+export { default as Footer } from "./footer";

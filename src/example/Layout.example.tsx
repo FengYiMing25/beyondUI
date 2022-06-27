@@ -3,42 +3,42 @@ import Content from "../components/Layout/content";
 import Footer from "../components/Layout/footer";
 import Header from "../components/Layout/header";
 import Layout from "../components/Layout/layout";
-
+import "./Layout.example.less"
 const LayoutExample = () => {
   return (
     <>
-      {/* 第一个例子
+      第一个例子
       <h1>example 1</h1>
-      <Layout style={{ height: 500 }}>
-        <Header>header</Header>
-        <Content>Content</Content>
-        <Footer>Footer</Footer>
+      <Layout style={{ height: 500,width:700 }}>
+        <Header className="x">header</Header>
+        <Content className="y">Content</Content>
+        <Footer className="x">Footer</Footer>
       </Layout>
       <h1>example 2</h1>
-      <Layout style={{ height: 500 }}>
-        <Header>header</Header>
+      <Layout style={{ height: 500,width:700  }}>
+        <Header className="x">header</Header>
         <Layout>
-          <Aside>aside</Aside>
-          <Content>Content</Content>
+          <Aside className="z">aside</Aside>
+          <Content className="y">Content</Content>
         </Layout>
-        <Footer>Footer</Footer>
+        <Footer className="x">Footer</Footer>
       </Layout>
       <h1>example 3</h1>
-      <Layout style={{ height: 500 }}>
-        <Header>header</Header>
+      <Layout style={{ height: 500,width:700  }}>
+        <Header className="x">header</Header>
         <Layout>
-          <Content>Content</Content>
-          <Aside>aside</Aside>
+          <Content className="y">Content</Content>
+          <Aside className="z">aside</Aside>
         </Layout>
-        <Footer>Footer</Footer>
-      </Layout> */}
+        <Footer className="x">Footer</Footer>
+      </Layout>
       <h1>example 4</h1>
-      <Layout style={{ height: 500 }}>
-        <Aside>aside</Aside>
+      <Layout style={{ height: 500,width:700 }}>
+        <Aside className="z">aside</Aside>
         <Layout>
-          <Header>header</Header>
-          <Content>Content</Content>
-          <Footer>Footer</Footer>
+          <Header className="x">header</Header>
+          <Content className="y">Content</Content>
+          <Footer className="x">Footer</Footer>
         </Layout>
       </Layout>
     </>
