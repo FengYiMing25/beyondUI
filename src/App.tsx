@@ -3,8 +3,8 @@ import IconExample from "./example/Icon.example";
 import ButtonExample from "./example/Button.example";
 import LayoutExample from "./example/Layout.example";
 import "./App.less";
-import { HashRouter as Router, Route, Link } from "react-router-dom";
-import logo from '../logo.png'
+import { HashRouter as Router, Route, NavLink } from "react-router-dom";
+import logo from "../logo.png";
 
 import {
   Layout,
@@ -18,41 +18,50 @@ function App(): JSX.Element {
   return (
     <Router>
       <>
-        <Layout style={{border:'1px solid red'}}>
-          <Header>
-            <div>header</div>
-            {/* <div><img src={logo} alt="" /></div> */}
+        <Layout>
+          <Header className="headerBox">
+            <div className="logoBox">
+              <img width="75" height="75" src={logo} alt="" />
+              <span>Beyone UI</span>
+            </div>
           </Header>
           <Layout>
-            <Aside>
+            <Aside className="asideBox">
+            <h3>组件</h3>
               <ul>
-                <h3>组件</h3>
                 <li>
-                  <Link to="/icon">icon</Link>
+                  <NavLink to="/icon">icon</NavLink>
                 </li>
                 <li>
-                  <Link to="/layout">layout</Link>
+                  <NavLink to="/layout">layout</NavLink>
                 </li>
                 <li>
-                  <Link to="/button">button</Link>
+                  <NavLink to="/button">button</NavLink>
                 </li>
                 <li>
-                  <Link to="/dialog">dialog</Link>
+                  <NavLink to="/dialog">dialog</NavLink>
                 </li>
               </ul>
             </Aside>
-            <Content>
-                  <Route path="/icon"><IconExample /></Route>
-                  <Route path="/layout"><LayoutExample /></Route>
-                  <Route path="/button"><ButtonExample /></Route>
-                  <Route path="/dialog"><DialogExample /></Route>
+            <Content className="contentBox">
+              <Route path="/icon">
+                <IconExample />
+              </Route>
+              <Route path="/layout">
+                <LayoutExample />
+              </Route>
+              <Route path="/button">
+                <ButtonExample />
+              </Route>
+              <Route path="/dialog">
+                <DialogExample />
+              </Route>
             </Content>
           </Layout>
-          <Footer>Footer</Footer>
+          <Footer className="footerBox">&copy; BeyondUI</Footer>
         </Layout>
       </>
     </Router>
-    
   );
 }
 

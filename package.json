@@ -40,6 +40,7 @@
     "jsdom-global": "3.0.2",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
+    "raw-loader": "^4.0.2",
     "react-test-renderer": "^18.1.0",
     "rollup-plugin-svg-sprites": "^1.2.4",
     "ts-jest": "^28.0.2",

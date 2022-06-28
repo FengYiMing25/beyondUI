@@ -1,16 +1,125 @@
 [class^="beyond-"] {
   box-sizing: border-box;
   // 因为上边那样写不会应用到伪元素上所以需要加下边的代码
-  &::before,&::after{
+  &::before,
+  &::after {
     box-sizing: border-box;
   }
 }
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #000;
+}
+
+.clearFix:after {
+  content: "";
+  display: block;
+  height: 0;
+  line-height: 0;
+  visibility: hidden;
+  clear: both;
+}
+
+i,
+em,
+cite {
+  font-style: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 16px !important;
+  color: #000;
+  font-weight: normal;
+}
+
+input {
+  outline: none;
+  border: none;
+}
+
+select,
+option,
+textarea {
+  outline: none;
+  border: none;
+}
+
 button {
   margin-right: 10px;
-  &:first-child{
+  &:first-child {
     margin-left: 0;
   }
-  &:last-child{
+  &:last-child {
     margin-right: 0;
   }
+}
+@main-color: #52575d;
+@border-color: #eee;
+.logoBox {
+  display: flex;
+  align-items: center;
+  background: #dfd8c8;
+  > span {
+    color: @main-color;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+.asideBox {
+  height: 100vh;
+  border-right: 1px solid @border-color;
+  h3{
+    padding: 8px;
+  }
+  > ul {
+    width: 15em;
+    padding: 8px 0;
+    > li {
+      > a {
+        display: block;
+        padding: 8px;
+        color: @main-color;
+        &:hover{
+          background: lighten(#1976d2,50%);
+        }
+        &.active {
+          background: lighten(#1976d2,30%);
+          color: #fff;
+          position: relative;
+          &::after{
+            content: '';
+            position: absolute;
+            right: 2px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #1976d2;
+          }
+        }
+      }
+    }
+  }
+}
+.contentBox {
+  padding: 24px;
+}
+.footerBox {
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  border-top: 1px solid @border-color;
+  font-size: 12px;
+  color: @main-color;
 }
